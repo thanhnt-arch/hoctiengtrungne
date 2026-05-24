@@ -446,25 +446,25 @@
             <div class="w-full max-w-md mb-8">
               <div class="text-xs font-bold text-txt-2 uppercase tracking-wider mb-3">1. Chọn nguồn từ vựng</div>
               <div class="grid grid-cols-2 gap-3 mb-3">
-                <button onclick="selectQuizPool('learned')" id="pool-learned" class="pool-btn p-3 rounded-xl border-2 border-border bg-panel text-txt-2 text-sm font-semibold hover:border-accent/40 transition-all">📚 Từ đã học</button>
-                <button onclick="selectQuizPool('all')" id="pool-all" class="pool-btn p-3 rounded-xl border-2 border-border bg-panel text-txt-2 text-sm font-semibold hover:border-accent/40 transition-all">🌍 Tất cả từ vựng</button>
+                <button onclick="selectQuizPool('learned', this)" id="pool-learned" class="pool-btn p-3 rounded-xl border-2 border-border bg-panel text-txt-2 text-sm font-semibold hover:border-accent/40 transition-all">📚 Từ đã học</button>
+                <button onclick="selectQuizPool('all', this)" id="pool-all" class="pool-btn p-3 rounded-xl border-2 border-border bg-panel text-txt-2 text-sm font-semibold hover:border-accent/40 transition-all">🌍 Tất cả từ vựng</button>
               </div>
               <div class="text-[10px] text-txt-3 mb-2">Hoặc chọn theo cấp HSK cụ thể:</div>
               <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                <button onclick="selectQuizPool(1)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 1</button>
-                <button onclick="selectQuizPool(2)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 2</button>
-                <button onclick="selectQuizPool(3)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 3</button>
-                <button onclick="selectQuizPool(4)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 4</button>
-                <button onclick="selectQuizPool(5)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 5</button>
-                <button onclick="selectQuizPool(6)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 6</button>
+                <button onclick="selectQuizPool(1, this)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 1</button>
+                <button onclick="selectQuizPool(2, this)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 2</button>
+                <button onclick="selectQuizPool(3, this)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 3</button>
+                <button onclick="selectQuizPool(4, this)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 4</button>
+                <button onclick="selectQuizPool(5, this)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 5</button>
+                <button onclick="selectQuizPool(6, this)" class="pool-btn p-2 rounded-lg border-2 border-border bg-panel text-xs font-semibold hover:border-accent/40">HSK 6</button>
               </div>
             </div>
 
             <div class="w-full max-w-md mb-8">
               <div class="text-xs font-bold text-txt-2 uppercase tracking-wider mb-3">2. Chọn chiều dịch</div>
               <div class="grid grid-cols-2 gap-3">
-                <button onclick="selectQuizDir('zh-vi')" id="dir-zh-vi" class="dir-btn p-3 rounded-xl border-2 border-accent bg-accent-light text-accent-dim text-sm font-semibold transition-all"><span class="font-cn text-base">中</span> → Việt</button>
-                <button onclick="selectQuizDir('vi-zh')" id="dir-vi-zh" class="dir-btn p-3 rounded-xl border-2 border-border bg-panel text-txt-2 text-sm font-semibold hover:border-accent/40 transition-all">Việt → <span class="font-cn text-base">中</span></button>
+                <button onclick="selectQuizDir('zh-vi', this)" id="dir-zh-vi" class="dir-btn p-3 rounded-xl border-2 border-accent bg-accent-light text-accent-dim text-sm font-semibold transition-all"><span class="font-cn text-base">中</span> → Việt</button>
+                <button onclick="selectQuizDir('vi-zh', this)" id="dir-vi-zh" class="dir-btn p-3 rounded-xl border-2 border-border bg-panel text-txt-2 text-sm font-semibold hover:border-accent/40 transition-all">Việt → <span class="font-cn text-base">中</span></button>
               </div>
             </div>
 
@@ -507,45 +507,6 @@
             </div>
             <div class="flex gap-3">
               <button onclick="startQuizSession()" class="px-5 py-2.5 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-dim transition-colors">Làm lại</button>
-              <button onclick="switchView('dashboard')" class="px-5 py-2.5 bg-panel border border-border text-txt-2 text-sm font-medium rounded-xl hover:text-txt transition-colors">Về trang chủ</button>
-            </div>
-          </div>
-        </div>
-
-          <div id="quiz-play" class="hidden">
-            <div class="flex items-center justify-between mb-6">
-              <div class="text-sm text-txt-3">Câu <span id="q-num" class="text-txt font-semibold">1</span>/10</div>
-              <div class="flex items-center gap-1.5">
-                <i data-lucide="zap" class="w-3.5 h-3.5 text-accent"></i>
-                <span id="q-score" class="text-sm font-semibold text-accent-dim">0</span>
-              </div>
-            </div>
-            <div class="h-2 bg-surface-3 rounded-full mb-8 overflow-hidden">
-              <div id="q-progress" class="h-full bg-accent rounded-full transition-all duration-300" style="width:10%"></div>
-            </div>
-            <div class="text-center mb-8">
-              <div id="q-word" class="text-5xl sm:text-6xl font-cn font-medium hanzi-display mb-2 text-txt">你好</div>
-              <div id="q-prompt" class="text-sm text-txt-3">Chọn nghĩa đúng</div>
-            </div>
-            <div id="q-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto mb-6"></div>
-            <div class="flex justify-center">
-              <button id="q-next" onclick="nextQuestion()" class="hidden px-6 py-3 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-dim transition-colors shadow-md shadow-accent/20">
-                Tiếp theo →
-              </button>
-            </div>
-          </div>
-
-          <div id="quiz-result" class="hidden flex flex-col items-center justify-center py-12">
-            <div id="result-icon" class="text-6xl mb-4 bounce-in">🎉</div>
-            <div class="text-2xl font-semibold text-txt mb-2" id="result-title">Xuất sắc!</div>
-            <p class="text-txt-3 text-sm mb-6" id="result-desc">Baee đã hoàn thành vòng quiz</p>
-            <div class="flex gap-6 mb-8">
-              <div class="text-center"><div class="text-3xl font-bold text-accent" id="result-correct">0</div><div class="text-[10px] text-txt-3 uppercase">Đúng</div></div>
-              <div class="text-center"><div class="text-3xl font-bold text-danger" id="result-wrong">0</div><div class="text-[10px] text-txt-3 uppercase">Sai</div></div>
-              <div class="text-center"><div class="text-3xl font-bold text-accent-dim" id="result-xp">0</div><div class="text-[10px] text-txt-3 uppercase">XP</div></div>
-            </div>
-            <div class="flex gap-3">
-              <button onclick="startQuiz(lastQuizType)" class="px-5 py-2.5 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-dim transition-colors">Làm lại</button>
               <button onclick="switchView('dashboard')" class="px-5 py-2.5 bg-panel border border-border text-txt-2 text-sm font-medium rounded-xl hover:text-txt transition-colors">Về trang chủ</button>
             </div>
           </div>
@@ -629,17 +590,20 @@
     let quizIndex = 0;
     let quizScore = 0;
     let quizWrong = 0;
-    let lastQuizType = 'zh-vi';
+    let selectedQuizPool = null;
+    let selectedQuizDir = 'zh-vi';
 
     // ==================== TẢI DỮ LIỆU ĐỒNG BỘ TỪ GOOGLE SHEETS ====================
-    async function fetchDatabaseFromSheets() {
+        async function fetchDatabaseFromSheets() {
       try {
         const response = await fetch(GOOGLE_SHEET_API_URL);
+        if (!response.ok) throw new Error('Lỗi mạng');
+        
         const data = await response.json();
         
-        USERS_DATABASE = data.users;
-        vocabData = data.vocab;
-        progressDatabase = data.progress;
+        USERS_DATABASE = data.users || {};
+        vocabData = data.vocab || [];
+        progressDatabase = data.progress || {};
         
         document.getElementById('loading-screen').classList.add('hidden');
         
@@ -653,408 +617,78 @@
         }
       } catch (error) {
         console.error("Lỗi nạp dữ liệu Sheets:", error);
-        alert("Lỗi kết nối API Google Sheets! Anh hãy kiểm tra lại cấu hình link Web App Apps Script nhé.");
-      }
-    }
-
-    // ==================== HỆ THỐNG PHÁT ÂM CHUẨN (WEB SPEECH API) ====================
-    function playFcAudio() {
-      if (fcCards.length === 0) return;
-      const card = fcCards[fcIndex];
-      let cleanText = card.hanzi.split('【')[0].trim();
-
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); 
-        
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        utterance.lang = 'zh-CN';
-        utterance.rate = 0.85; 
-
-        window.speechSynthesis.speak(utterance);
-      } else {
-        showToast("Trình duyệt hiện tại của anh không hỗ trợ giọng nói hệ thống!", "warn");
-      }
-    }
-
-    // ==================== ĐĂNG NHẬP / ĐĂNG XUẤT ====================
-    function handleLogin() {
-      const inputUser = document.getElementById('login-username').value.trim().toLowerCase();
-      const inputPass = document.getElementById('login-password').value;
-
-      if (!inputUser) {
-        showToast("Vui lòng điền tên đăng nhập Baee ơi!", "warn");
-        return;
-      }
-      if (inputPass !== "123456") {
-        showToast("Sai mật khẩu hệ thống rồi Baee ơi!", "error");
-        return;
-      }
-
-      if (USERS_DATABASE[inputUser]) {
-        currentUserKey = inputUser;
-        localStorage.setItem('thanhnt_current_session', inputUser);
-        
-        document.getElementById('auth-screen').classList.add('hidden');
-        document.getElementById('main-app').classList.remove('hidden');
-        
-        loadUserState();
-        showToast(`Đăng nhập thành công! Chào baee quay trở lại.`, `success`);
-      } else {
-        showToast("Tài khoản này chưa được cấp quyền truy cập!", "error");
-      }
-    }
-
-    function handleLogout() {
-      if(confirm("Baee muốn rời bỏ mình shao?")) {
-        localStorage.removeItem('thanhnt_current_session');
-        currentUserKey = null;
-        document.getElementById('auth-screen').classList.remove('hidden');
-        document.getElementById('main-app').classList.add('hidden');
-        document.getElementById('settings-menu').classList.add('hidden');
-        document.getElementById('login-username').value = "";
-      }
-    }
-
-    function loadUserState() {
-      const userConfig = USERS_DATABASE[currentUserKey];
-      
-      if (progressDatabase && progressDatabase[currentUserKey]) {
-        try {
-          state = { ...INITIAL_STATE, ...JSON.parse(progressDatabase[currentUserKey]) };
-        } catch(e) {
-          state = JSON.parse(JSON.stringify(INITIAL_STATE));
-        }
-      } else {
-        const savedLocal = localStorage.getItem(`thanhnt_state_${currentUserKey}`);
-        if (savedLocal) {
-          state = { ...INITIAL_STATE, ...JSON.parse(savedLocal) };
-        } else {
-          state = JSON.parse(JSON.stringify(INITIAL_STATE));
-          state.hskLevel = userConfig.defaultHsk;
-        }
-      }
-
-      const today = new Date().toDateString();
-      if (state.lastStudyDate !== today) {
-        const yesterday = new Date(Date.now() - 86400000).toDateString();
-        if (state.lastStudyDate !== yesterday && state.lastStudyDate !== today) {
-          state.streak = 0;
-        }
-        state.todayCount = 0;
-      }
-
-      document.getElementById('set-hsk').value = state.hskLevel;
-      saveState();
-      updateUI();
-  
-    }
-
-    async function saveState() {
-      if (!currentUserKey) return;
-      
-      const stringData = JSON.stringify(state);
-      localStorage.setItem(`thanhnt_state_${currentUserKey}`, stringData);
-
-      try {
-        fetch(GOOGLE_SHEET_API_URL, {
-          method: "POST",
-          mode: "no-cors", 
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: currentUserKey, stateData: stringData })
-        });
-      } catch (err) {
-        console.warn("Chưa đồng bộ lưu tiến độ lên đám mây Sheet:", err);
-      }
-    }
-
-    function recordStudy() {
-      const today = new Date().toDateString();
-      if (state.lastStudyDate !== today) {
-        const yesterday = new Date(Date.now() - 86400000).toDateString();
-        if (state.lastStudyDate === yesterday || state.lastStudyDate === null) {
-          state.streak++;
-        } else {
-          state.streak = 1;
-        }
-        state.lastStudyDate = today;
-        state.todayCount = 0;
-      }
-      state.todayCount++;
-      const dayIndex = new Date().getDay();
-      state.weeklyData[dayIndex] = state.todayCount;
-      saveState();
-      updateUI();
-    }
-
-    function toggleSettingsMenu() {
-      document.getElementById('settings-menu').classList.toggle('hidden');
-    }
-
-    function saveProfileSettings() {
-      state.hskLevel = document.getElementById('set-hsk').value;
-      saveState();
-      updateUI();
-      showToast("Đã cập nhật trình độ hiển thị!", "success");
-    }
-
-    function toggleDarkMode() {
-      const isDark = document.getElementById('dark-mode-toggle').checked;
-      if (isDark) {
-        document.body.style.filter = "invert(0.9) hue-rotate(180deg)";
-      } else {
-        document.body.style.filter = "none";
-      }
-    }
-
-    function switchView(viewId) {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById('view-' + viewId).classList.add('active');
-      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-      const link = document.querySelector(`.sidebar-link[data-view="${viewId}"]`);
-      if (link) link.classList.add('active');
-      const titles = { dashboard:'Tổng quan', flashcard:'Thẻ từ vựng', quiz:'Luyện tập', lessons:'Bài học', stats:'Thống kê' };
-      document.getElementById('view-title').textContent = titles[viewId] || '';
-            if (viewId === 'flashcard') {
-        backToFcStart(); // Mở flashcard lúc nào cũng hiện màn chọn cấp độ trước
-      };
-      if (viewId === 'lessons') renderLessons();
-      if (viewId === 'stats') renderStats();
-      if (viewId === 'quiz') resetQuizView();
-      closeMobileSidebar();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function openMobileSidebar() {
-      document.getElementById('sidebar').classList.add('open');
-      document.getElementById('mobile-overlay').classList.remove('hidden');
-    }
-    function closeMobileSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('mobile-overlay').classList.add('hidden');
-    }
-
-    function updateUI() {
-      const userConfig = USERS_DATABASE[currentUserKey];
-      if (!userConfig) return;
-
-      document.getElementById('sb-name').textContent = userConfig.fullName;
-      document.getElementById('sb-avatar').textContent = userConfig.fullName.charAt(0).toUpperCase();
-      document.getElementById('sb-streak-lvl').textContent = `${state.hskLevel || 'HSK 1'} · ${state.streak} ngày streak`;
-
-      document.getElementById('streak-display').textContent = state.streak;
-      document.getElementById('xp-display').textContent = state.xp + ' XP';
-      
-      document.getElementById('dash-streak').textContent = state.streak;
-      document.getElementById('dash-words').textContent = state.wordsLearned.length;
-      const accuracy = state.quizTotal > 0 ? Math.round((state.quizCorrect / state.quizTotal) * 100) : 0;
-      document.getElementById('dash-accuracy').textContent = accuracy + '%';
-      document.getElementById('dash-today').textContent = state.todayCount;
-
-      const goal = 20;
-      const current = Math.min(state.todayCount, goal);
-      const pct = current / goal;
-      const circumference = 326.73;
-      document.getElementById('goal-ring').style.strokeDashoffset = circumference * (1 - pct);
-      document.getElementById('goal-current').textContent = current;
-      document.getElementById('goal-target').textContent = goal;
-
-      const hour = new Date().getHours();
-      let greet = 'Chào buổi sáng';
-      if (hour >= 12 && hour < 18) greet = 'Chào buổi chiều';
-      else if (hour >= 18) greet = 'Chào buổi tối';
-      
-      let formalName = userConfig.fullName;
-      if (userConfig.prefix) {
-        formalName = `"${userConfig.prefix}" ${userConfig.fullName}`;
-      }
-      document.getElementById('greeting-text').textContent = `${greet}, ${formalName} 👋`;
-
-      renderRecentWords();
-
-      if (state.wordsLearned.length >= 10) achievementData[1].unlocked = true;
-      if (state.xp >= 100) achievementData[3].unlocked = true;
-      if (state.streak >= 7) achievementData[4].unlocked = true;
-      if (state.wordsLearned.length >= 50) achievementData[5].unlocked = true;
-      if (state.xp >= 500) achievementData[6].unlocked = true;
-      if (state.streak >= 30) achievementData[7].unlocked = true;
-    }
-
-    function renderRecentWords() {
-      const container = document.getElementById('recent-words');
-      if (!state.wordsLearned || state.wordsLearned.length === 0) {
-        container.innerHTML = '<div class="p-5 text-center text-txt-3 text-sm">Chưa có từ vựng. Bắt đầu học ngay!</div>';
-        return;
-      }
-      const recent = state.wordsLearned.slice(-5).reverse();
-      container.innerHTML = recent.map(id => {
-        const w = vocabData.find(v => v.id === id);
-        if (!w) return '';
-        return `<div class="flex items-center justify-between px-5 py-3 hover:bg-surface-2 transition-colors">
-          <div class="flex items-center gap-4">
-            <span class="text-xl font-cn text-txt">${w.hanzi}</span>
-            <div>
-              <div class="text-sm text-txt-2">${w.viet}</div>
-              <div class="text-[10px] text-txt-3">${w.pinyin}</div>
-            </div>
+        document.getElementById('loading-screen').innerHTML = `
+          <div class="text-center p-4">
+            <div class="text-4xl mb-4">😵</div>
+            <p class="text-sm font-medium text-danger mb-2">Không thể kết nối đến dữ liệu Google Sheets!</p>
+            <p class="text-xs text-txt-3 mb-4">Anh hãy kiểm tra lại link Web App Apps Script hoặc bật chia sẻ công khai cho link nhé.</p>
+            <button onclick="location.reload()" class="px-4 py-2 bg-accent text-white text-xs font-semibold rounded-lg">Thử lại</button>
           </div>
-          <span class="tag-hsk${w.hsk} text-[8px] px-1.5 py-0.5 rounded-full font-medium">HSK ${w.hsk}</span>
-        </div>`;
-      }).join('');
+        `;
+      }
     }
 
-        function startFlashcards(level) {
-      document.getElementById('fc-start').classList.add('hidden');
-      document.getElementById('fc-play').classList.remove('hidden');
+    // HÀM MỚI: Xử lý khi anh bấm chọn nguồn từ vựng
+    function selectQuizPool(pool, el) {
+      selectedQuizPool = pool;
+      document.querySelectorAll('.pool-btn').forEach(btn => {
+        btn.classList.remove('border-accent', 'bg-accent-light', 'text-accent-dim');
+        btn.classList.add('border-border', 'bg-panel', 'text-txt-2');
+      });
+      el.classList.remove('border-border', 'bg-panel', 'text-txt-2');
+      el.classList.add('border-accent', 'bg-accent-light', 'text-accent-dim');
       
-      document.getElementById('fc-level-title').textContent = level === 'all' ? 'Tất cả HSK' : 'HSK ' + level;
+      document.getElementById('btn-start-quiz').disabled = false;
+    }
 
-      // Lọc từ theo cấp độ và GIỮ NGUYÊN THỨ TỰ (không xáo trộn)
-      fcCards = level === 'all' ? [...vocabData] : vocabData.filter(v => v.hsk === parseInt(level));
+    // HÀM MỚI: Xử lý khi anh bấm chọn chiều dịch
+    function selectQuizDir(dir, el) {
+      selectedQuizDir = dir;
+      document.querySelectorAll('.dir-btn').forEach(btn => {
+        btn.classList.remove('border-accent', 'bg-accent-light', 'text-accent-dim');
+        btn.classList.add('border-border', 'bg-panel', 'text-txt-2');
+      });
+      el.classList.remove('border-border', 'bg-panel', 'text-txt-2');
+      el.classList.add('border-accent', 'bg-accent-light', 'text-accent-dim');
+    }
+
+    // HÀM MỚI: Nút Bắt đầu Quiz
+    function startQuizSession() {
+      let poolData = [];
+      if (selectedQuizPool === 'learned') {
+        poolData = vocabData.filter(v => state.wordsLearned.includes(v.id));
+      } else if (selectedQuizPool === 'all') {
+        poolData = [...vocabData];
+      } else if (typeof selectedQuizPool === 'number') {
+        poolData = vocabData.filter(v => v.hsk === selectedQuizPool);
+      }
       
-      if(fcCards.length === 0) {
-        showToast("Cấp độ này chưa có từ vựng trong kho dữ liệu!", "warn");
-        backToFcStart();
+      if (poolData.length < 4) {
+        showToast("Không đủ từ vựng (cần ít nhất 4 từ) để tạo Quiz!", "warn");
         return;
       }
-
-      fcIndex = 0;
-      isFlipped = false;
-      showFlashcard('none');
-    }
-
-    // Hàm quay lại màn hình chọn cấp độ
-    function backToFcStart() {
-      document.getElementById('fc-start').classList.remove('hidden');
-      document.getElementById('fc-play').classList.add('hidden');
-    }
-
-    function showFlashcard(direction) {
-      if (fcCards.length === 0) {
-        document.getElementById('fc-hanzi').textContent = "📭";
-        document.getElementById('fc-pinyin').textContent = "";
-        document.getElementById('fc-type').textContent = "";
-        document.getElementById('fc-viet').textContent = "Trống dữ liệu";
-        return;
-      }
-      
-      // Đảm bảo thẻ luôn ở trạng thái úp khi chuyển sang từ mới
-      const fc = document.getElementById('flashcard');
-      fc.classList.remove('flipped');
-      isFlipped = false;
-
-      const card = fcCards[fcIndex];
-      let cleanHanzi = card.hanzi.split('【')[0].trim();
-      document.getElementById('fc-hanzi').textContent = cleanHanzi;
-      document.getElementById('fc-pinyin').textContent = card.pinyin;
-      document.getElementById('fc-type').textContent = card.loaiTu || 'Từ vựng';
-      document.getElementById('fc-viet').textContent = card.viet;
-      
-      let exampleHtml = `<div class="font-cn text-base text-txt-2 mb-2">${card.example || ''}</div>`;
-      if (card.exTrans) {
-        exampleHtml += `<div style="font-size: 1.35rem; font-weight: 700; color: #16a34a; margin-top: 6px;">${card.exTrans}</div>`;
-      }
-      document.getElementById('fc-example').innerHTML = exampleHtml;
-
-      const tagEl = document.getElementById('fc-tag');
-      tagEl.textContent = 'HSK ' + card.hsk;
-      tagEl.className = `tag-hsk${card.hsk} text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-medium`;
-
-      document.getElementById('fc-progress').style.width = ((fcIndex + 1) / fcCards.length * 100) + '%';
-      document.getElementById('fc-count').textContent = `${fcIndex + 1}/${fcCards.length}`;
-
-      document.getElementById('btn-prev').style.opacity = fcIndex > 0 ? '1' : '0.3';
-      document.getElementById('btn-next').style.opacity = fcIndex < fcCards.length - 1 ? '1' : '0.3';
-    }
-
-    function flipCard() {
-      if (isAnimating) return;
-      document.getElementById('flashcard').classList.toggle('flipped');
-      isFlipped = !isFlipped;
-    }
-
-    function goToCard(newIndex, direction) {
-      if (isAnimating || newIndex < 0 || newIndex >= fcCards.length) return;
-      isAnimating = true;
-      
-      const fc = document.getElementById('flashcard');
-      // Mờ dần và trượt nhẹ
-      fc.style.opacity = '0';
-      fc.style.transform = direction === 'right' ? 'translateX(-30px)' : 'translateX(30px)';
-
-      setTimeout(() => {
-        fcIndex = newIndex;
-        showFlashcard(direction); // Cập nhật nội dung và reset flip ở đây
-        
-        // Đặt lại vị trí để chuẩn bị trượt vào
-        fc.style.transition = 'none';
-        fc.style.transform = direction === 'right' ? 'translateX(30px)' : 'translateX(-30px)';
-        
-        // Kích hoạt reflow để áp dụng style ngay lập tức
-        void fc.offsetWidth; 
-        
-        // Bật lại transition và trượt vào giữa
-        fc.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-        fc.style.opacity = '1';
-        fc.style.transform = 'translateX(0)';
-
-        setTimeout(() => { isAnimating = false; }, 250);
-      }, 250);
-    }
-
-    function nextCardManual() {
-      if (fcCards.length === 0) return;
-      if (fcIndex < fcCards.length - 1) {
-        goToCard(fcIndex + 1, 'right');
-      } else {
-        showToast('🔄 Đã học xong danh sách này! Quay lại từ đầu.', 'info');
-        fcIndex = 0; // Không xáo trộn, chỉ quay lại từ đầu
-        const fc = document.getElementById('flashcard');
-        fc.style.opacity = '0';
-        setTimeout(() => {
-          showFlashcard('none');
-          fc.style.opacity = '1';
-        }, 200);
-      }
-    }
-
-    function prevCard() { 
-      if (fcIndex > 0) goToCard(fcIndex - 1, 'left'); 
-    }
-
-    function fcAction(status) {
-      if (fcCards.length === 0) return;
-      const currentCard = fcCards[fcIndex];
-      
-      if (!state.wordsLearned.includes(currentCard.id)) {
-        state.wordsLearned.push(currentCard.id);
-      }
-      
-      let gainedXp = 5;
-      if (status === 'easy') gainedXp = 10;
-      else if (status === 'hard') gainedXp = 2;
-      
-      state.xp += gainedXp;
-      recordStudy();
-      nextCardManual();
+      startQuiz(selectedQuizDir, poolData);
     }
 
     function resetQuizView() {
       document.getElementById('quiz-start').classList.remove('hidden');
       document.getElementById('quiz-play').classList.add('hidden');
       document.getElementById('quiz-result').classList.add('hidden');
+      // Reset UI selections
+      selectedQuizPool = null;
+      document.querySelectorAll('.pool-btn').forEach(btn => {
+        btn.classList.remove('border-accent', 'bg-accent-light', 'text-accent-dim');
+        btn.classList.add('border-border', 'bg-panel', 'text-txt-2');
+      });
+      document.getElementById('btn-start-quiz').disabled = true;
     }
 
-    function startQuiz(type) {
-      if (vocabData.length < 4) {
-        showToast("Dữ liệu quá ít để tạo bài Quiz trắc nghiệm!", "warn");
-        return;
-      }
-      lastQuizType = type;
+    function startQuiz(type, poolData) {
       quizScore = 0; quizWrong = 0; quizIndex = 0;
 
-      const shuffled = [...vocabData].sort(() => Math.random() - 0.5);
+      const shuffled = [...poolData].sort(() => Math.random() - 0.5);
       quizQuestions = shuffled.slice(0, 10).map(word => {
-        const wrongAnswers = vocabData.filter(v => v.id !== word.id).sort(() => Math.random() - 0.5).slice(0, 3);
+        const wrongAnswers = poolData.filter(v => v.id !== word.id).sort(() => Math.random() - 0.5).slice(0, 3);
         const options = [word, ...wrongAnswers].sort(() => Math.random() - 0.5);
         return { word, options, type };
       });
@@ -1119,6 +753,32 @@
       quizIndex++;
       if (quizIndex >= quizQuestions.length) showQuizResult();
       else showQuestion();
+    }
+
+    function showQuizResult() {
+      document.getElementById('quiz-play').classList.add('hidden');
+      document.getElementById('quiz-result').classList.remove('hidden');
+
+      const pct = Math.round((quizScore / 10) * 100);
+      document.getElementById('result-correct').textContent = quizScore;
+      document.getElementById('result-wrong').textContent = quizWrong;
+      document.getElementById('result-xp').textContent = quizScore * 10;
+
+      if (pct >= 80) {
+        document.getElementById('result-icon').textContent = '🎉';
+        document.getElementById('result-title').textContent = 'Xuất sắc!';
+        document.getElementById('result-desc').textContent = 'Tiến độ học tập rất vững vàng!';
+        if (pct === 100) achievementData[2].unlocked = true;
+      } else if (pct >= 50) {
+        document.getElementById('result-icon').textContent = '💪';
+        document.getElementById('result-title').textContent = 'Khá tốt!';
+        document.getElementById('result-desc').textContent = 'Xem lại vài từ sai nhé.';
+      } else {
+        document.getElementById('result-icon').textContent = '📖';
+        document.getElementById('result-title').textContent = 'Cần cố gắng hơn';
+        document.getElementById('result-desc').textContent = 'Hãy ôn luyện lại flashcard.';
+      }
+      recordStudy();
     }
 
     function showQuizResult() {
