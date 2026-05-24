@@ -115,13 +115,17 @@
     .nav-arrow { transition: all 0.2s ease; }
     .nav-arrow:hover { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); }
     .nav-arrow:active { transform: scale(0.9); }
+        /* Sửa lỗi xung đột hiệu ứng lật và chuyển thẻ */
+    #flashcard {
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
   </style>
 </head>
 <body class="bg-bg min-h-screen">
 
   <div id="loading-screen" class="fixed inset-0 bg-bg z-[500] flex flex-col items-center justify-center p-4">
     <div class="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mb-4"></div>
-    <p class="text-sm font-medium text-txt-2">Đang tải cấu hình học tập và dữ liệu từ Google Sheets...</p>
+    <p class="text-sm font-medium text-txt-2">Đang tải cấu hình học tập và dữ liệu...</p>
   </div>
 
   <div id="auth-screen" class="fixed inset-0 bg-bg z-[200] flex items-center justify-center p-4 hidden">
@@ -348,22 +352,94 @@
           </div>
         </div>
 
-        <div id="view-flashcard" class="view">
-          <div class="flex items-center justify-between mb-6">
-            <div>
-              <h2 class="text-xl font-semibold text-txt">Thẻ Từ Vựng</h2>
-              <p class="text-txt-3 text-xs mt-1">Nhấn vào thẻ để lật · Dùng ← → hoặc nút để chuyển</p>
+               <div id="view-flashcard" class="view">
+          <!-- MÀN HÌNH CHỌN CẤP ĐỘ HSK -->
+          <div id="fc-start" class="flex flex-col items-center justify-center py-16">
+            <div class="w-16 h-16 rounded-2xl bg-accent-light border border-accent/20 flex items-center justify-center mb-6 glow-accent">
+              <i data-lucide="layers" class="w-8 h-8 text-accent"></i>
             </div>
-            <select id="fc-level" onchange="loadFlashcards()" class="bg-surface-2 border border-border text-xs text-txt-2 rounded-lg px-3 py-2 focus:outline-none focus:border-accent/40">
-              <option value="all">Tất cả HSK</option>
-              <option value="1">HSK 1</option>
-              <option value="2">HSK 2</option>
-              <option value="3">HSK 3</option>
-              <option value="4">HSK 4</option>
-              <option value="5">HSK 5</option>
-              <option value="6">HSK 6</option>
-            </select>
+            <h2 class="text-2xl font-semibold text-txt mb-2">Thẻ Từ Vựng</h2>
+            <p class="text-txt-3 text-sm mb-8 text-center max-w-sm">Chọn cấp độ HSK bạn muốn học hôm nay</p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-sm w-full">
+              <button onclick="startFlashcards(1)" class="p-3 rounded-xl border-2 border-green-200 bg-green-50 text-green-700 font-semibold hover:bg-green-100 transition-colors">HSK 1</button>
+              <button onclick="startFlashcards(2)" class="p-3 rounded-xl border-2 border-blue-200 bg-blue-50 text-blue-700 font-semibold hover:bg-blue-100 transition-colors">HSK 2</button>
+              <button onclick="startFlashcards(3)" class="p-3 rounded-xl border-2 border-yellow-200 bg-yellow-50 text-yellow-700 font-semibold hover:bg-yellow-100 transition-colors">HSK 3</button>
+              <button onclick="startFlashcards(4)" class="p-3 rounded-xl border-2 border-red-200 bg-red-50 text-red-700 font-semibold hover:bg-red-100 transition-colors">HSK 4</button>
+              <button onclick="startFlashcards(5)" class="p-3 rounded-xl border-2 border-purple-200 bg-purple-50 text-purple-700 font-semibold hover:bg-purple-100 transition-colors">HSK 5</button>
+              <button onclick="startFlashcards(6)" class="p-3 rounded-xl border-2 border-orange-200 bg-orange-50 text-orange-700 font-semibold hover:bg-orange-100 transition-colors">HSK 6</button>
+              <button onclick="startFlashcards('all')" class="col-span-2 sm:col-span-3 p-3 rounded-xl border-2 border-border bg-surface-2 text-txt-2 font-semibold hover:bg-surface-3 transition-colors">Tất cả các cấp độ</button>
+            </div>
           </div>
+
+          <!-- MÀN HÌNH HỌC FLASHCARD -->
+          <div id="fc-play" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+              <button onclick="backToFcStart()" class="flex items-center gap-2 text-sm text-txt-3 hover:text-accent transition-colors font-medium">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Chọn cấp độ
+              </button>
+              <div id="fc-level-title" class="text-sm font-semibold text-txt bg-surface-2 px-3 py-1 rounded-lg">HSK 1</div>
+            </div>
+
+            <div class="flex items-center gap-3 mb-6">
+              <div class="flex-1 h-2 bg-surface-3 rounded-full overflow-hidden">
+                <div id="fc-progress" class="h-full bg-gradient-to-r from-accent to-accent-glow rounded-full transition-all duration-500" style="width:0%"></div>
+              </div>
+              <span id="fc-count" class="text-xs text-txt-3 font-mono">0/0</span>
+            </div>
+
+            <div class="flex items-center gap-3 sm:gap-4 mb-8">
+              <button onclick="prevCard()" id="btn-prev" class="nav-arrow flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-border bg-panel flex items-center justify-center text-txt-3 hover:text-accent">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+              </button>
+
+              <div class="flex-1 flex justify-center">
+                <div id="flashcard" class="flip-card w-full max-w-md h-72 sm:h-80 cursor-pointer" onclick="flipCard()">
+                  <div id="flip-inner-el" class="flip-inner relative w-full h-full">
+                    <div class="flip-front absolute inset-0 rounded-2xl bg-panel border-2 border-accent/10 glow-accent flex flex-col items-center justify-center p-6 hover:border-accent/25 transition-colors">
+                      <div class="flex flex-col items-center justify-center gap-2 mb-4">
+                        <div id="fc-type" class="text-xs text-txt-3 font-medium bg-surface-2 px-2 py-0.5 rounded-md">Động từ</div>
+                        <div id="fc-hanzi" class="hanzi-display text-6xl sm:text-7xl font-cn font-medium text-txt tracking-wide">你好</div>
+                        <button onclick="event.stopPropagation(); playFcAudio();" class="mt-2 px-3 py-1.5 rounded-full bg-surface-2 text-accent hover:bg-accent-light hover:text-accent-dim transition-all border border-border/50 flex items-center gap-1.5 text-xs font-medium" title="Nghe phát âm chuẩn">
+                          <i data-lucide="volume-2" class="w-4 h-4"></i> Nghe phát âm
+                        </button>
+                      </div>
+                      <div id="fc-pinyin" class="text-lg text-accent/80 font-light mb-2">nǐ hǎo</div>
+                      <div id="fc-tag" class="tag-hsk1 text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-medium">HSK 1</div>
+                      <div class="absolute bottom-4 text-[10px] text-txt-3 flex items-center gap-1"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Nhấn để lật</div>
+                    </div>
+                    <div class="flip-back absolute inset-0 rounded-2xl bg-accent-light border-2 border-accent/20 flex flex-col items-center justify-center p-6">
+                      <div id="fc-viet" class="text-2xl font-semibold mb-3 text-txt">Xin chào</div>
+                      <div id="fc-example" class="text-sm text-txt-2 text-center leading-relaxed mb-4 font-cn">你好，我是Thanh。<br><span class="text-txt-3 text-xs not-italic">Xin chào, tôi là Thanh.</span></div>
+                      <div class="absolute bottom-4 text-[10px] text-accent-dim">Baee đã nhớ chưa?</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button onclick="nextCardManual()" id="btn-next" class="nav-arrow flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-border bg-panel flex items-center justify-center text-txt-3 hover:text-accent">
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <div class="flex justify-center gap-3 sm:gap-4 mb-4">
+              <button onclick="fcAction('hard')" class="rate-btn flex items-center gap-2 px-5 py-3 rounded-xl bg-red-50 border-2 border-red-200 text-red-600 text-sm font-semibold hover:bg-red-100 hover:border-red-300">
+                <i data-lucide="x" class="w-4 h-4"></i> Khó
+              </button>
+              <button onclick="fcAction('ok')" class="rate-btn flex items-center gap-2 px-5 py-3 rounded-xl bg-yellow-50 border-2 border-yellow-200 text-yellow-700 text-sm font-semibold hover:bg-yellow-100 hover:border-yellow-300">
+                <i data-lucide="minus" class="w-4 h-4"></i> Tạm ổn
+              </button>
+              <button onclick="fcAction('easy')" class="rate-btn flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-light border-2 border-accent/20 text-accent-dim text-sm font-semibold hover:bg-green-100 hover:border-accent/40">
+                <i data-lucide="check" class="w-4 h-4"></i> Dễ
+              </button>
+            </div>
+
+            <div class="text-center text-[10px] text-txt-3 flex items-center justify-center gap-4">
+              <span>← → Chuyển thẻ</span>
+              <span>Space Lật thẻ</span>
+              <span>1 Khó · 2 Ổn · 3 Dễ</span>
+            </div>
+          </div>
+        </div>
 
           <div class="flex items-center gap-3 mb-6">
             <div class="flex-1 h-2 bg-surface-3 rounded-full overflow-hidden">
@@ -395,7 +471,7 @@
                   <div class="flip-back absolute inset-0 rounded-2xl bg-accent-light border-2 border-accent/20 flex flex-col items-center justify-center p-6">
                     <div id="fc-viet" class="text-2xl font-semibold mb-3 text-txt">Xin chào</div>
                     <div id="fc-example" class="text-sm text-txt-2 text-center leading-relaxed mb-4 font-cn">你好，我是Thanh。<br><span class="text-txt-3 text-xs not-italic">Xin chào, tôi là Thanh.</span></div>
-                    <div class="absolute bottom-4 text-[10px] text-accent-dim">Bạn đã nhớ chưa?</div>
+                    <div class="absolute bottom-4 text-[10px] text-accent-dim">Baee đã nhớ chưa?</div>
                   </div>
                 </div>
               </div>
@@ -468,7 +544,7 @@
           <div id="quiz-result" class="hidden flex flex-col items-center justify-center py-12">
             <div id="result-icon" class="text-6xl mb-4 bounce-in">🎉</div>
             <div class="text-2xl font-semibold text-txt mb-2" id="result-title">Xuất sắc!</div>
-            <p class="text-txt-3 text-sm mb-6" id="result-desc">Bạn đã hoàn thành vòng quiz</p>
+            <p class="text-txt-3 text-sm mb-6" id="result-desc">Baee đã hoàn thành vòng quiz</p>
             <div class="flex gap-6 mb-8">
               <div class="text-center"><div class="text-3xl font-bold text-accent" id="result-correct">0</div><div class="text-[10px] text-txt-3 uppercase">Đúng</div></div>
               <div class="text-center"><div class="text-3xl font-bold text-danger" id="result-wrong">0</div><div class="text-[10px] text-txt-3 uppercase">Sai</div></div>
@@ -484,7 +560,7 @@
         <div id="view-lessons" class="view">
           <div class="mb-8">
             <h2 class="text-xl font-semibold text-txt">Bài Học Theo HSK</h2>
-            <p class="text-txt-3 text-xs mt-1">Lộ trình có cấu trúc lưu từ Sheet</p>
+            <p class="text-txt-3 text-xs mt-1">Lộ trình có cấu trúc lưu trữ</p>
           </div>
           <div class="space-y-4" id="lessons-container"></div>
         </div>
@@ -492,7 +568,7 @@
         <div id="view-stats" class="view">
           <div class="mb-8">
             <h2 class="text-xl font-semibold text-txt">Thống Kê Học Tập</h2>
-            <p class="text-txt-3 text-xs mt-1">Theo dõi tiến độ được lưu đám mây</p>
+            <p class="text-txt-3 text-xs mt-1">Theo dõi tiến độ được lưu </p>
           </div>
           <div class="rounded-xl bg-panel border border-border p-5 mb-6">
             <div class="text-xs text-txt-3 mb-4 uppercase tracking-wider">Hoạt động 7 ngày qua</div>
@@ -518,7 +594,7 @@
   <script>
     // ==================== CẤU HÌNH LIÊN KẾT GOOGLE SHEETS ====================
     // Anh dán đoạn link URL Web App Apps Script mới triển khai của anh vào đây nhé!
-    const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwxSHUR7-NFUgc8hiT7ngeAbKvz8B0_dB_yK56pTlxSH7UQXAFt3Hkz79hVYNXvKFSi/exec";
+    const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxFFrtAQWJgiglRGYgC1BMWxejXCxqOR8ZyYMedlGL6pWwORPPuUgAAdc6Z611a1euv/exec";
 
     let USERS_DATABASE = {};
     let vocabData = [];
@@ -612,11 +688,11 @@
       const inputPass = document.getElementById('login-password').value;
 
       if (!inputUser) {
-        showToast("Vui lòng điền tên đăng nhập đồng dăm ơi!", "warn");
+        showToast("Vui lòng điền tên đăng nhập Baee ơi!", "warn");
         return;
       }
       if (inputPass !== "123456") {
-        showToast("Sai mật khẩu hệ thống rồi đồng dăm ơi!", "error");
+        showToast("Sai mật khẩu hệ thống rồi Baee ơi!", "error");
         return;
       }
 
@@ -628,14 +704,14 @@
         document.getElementById('main-app').classList.remove('hidden');
         
         loadUserState();
-        showToast(`Đăng nhập thành công! Chào đồng dăm quay trở lại.`, `success`);
+        showToast(`Đăng nhập thành công! Chào baee quay trở lại.`, `success`);
       } else {
         showToast("Tài khoản này chưa được cấp quyền truy cập!", "error");
       }
     }
 
     function handleLogout() {
-      if(confirm("Đồng dăm muốn rời hệ thống shao?")) {
+      if(confirm("Baee muốn rời bỏ mình shao?")) {
         localStorage.removeItem('thanhnt_current_session');
         currentUserKey = null;
         document.getElementById('auth-screen').classList.remove('hidden');
@@ -676,7 +752,7 @@
       document.getElementById('set-hsk').value = state.hskLevel;
       saveState();
       updateUI();
-      loadFlashcards();
+  
     }
 
     async function saveState() {
@@ -744,7 +820,9 @@
       if (link) link.classList.add('active');
       const titles = { dashboard:'Tổng quan', flashcard:'Thẻ từ vựng', quiz:'Luyện tập', lessons:'Bài học', stats:'Thống kê' };
       document.getElementById('view-title').textContent = titles[viewId] || '';
-      if (viewId === 'flashcard') loadFlashcards();
+            if (viewId === 'flashcard') {
+        backToFcStart(); // Mở flashcard lúc nào cũng hiện màn chọn cấp độ trước
+      };
       if (viewId === 'lessons') renderLessons();
       if (viewId === 'stats') renderStats();
       if (viewId === 'quiz') resetQuizView();
@@ -830,13 +908,30 @@
       }).join('');
     }
 
-    function loadFlashcards() {
-      const level = document.getElementById('fc-level').value;
+        function startFlashcards(level) {
+      document.getElementById('fc-start').classList.add('hidden');
+      document.getElementById('fc-play').classList.remove('hidden');
+      
+      document.getElementById('fc-level-title').textContent = level === 'all' ? 'Tất cả HSK' : 'HSK ' + level;
+
+      // Lọc từ theo cấp độ và GIỮ NGUYÊN THỨ TỰ (không xáo trộn)
       fcCards = level === 'all' ? [...vocabData] : vocabData.filter(v => v.hsk === parseInt(level));
-      fcCards.sort(() => Math.random() - 0.5);
+      
+      if(fcCards.length === 0) {
+        showToast("Cấp độ này chưa có từ vựng trong kho dữ liệu!", "warn");
+        backToFcStart();
+        return;
+      }
+
       fcIndex = 0;
       isFlipped = false;
       showFlashcard('none');
+    }
+
+    // Hàm quay lại màn hình chọn cấp độ
+    function backToFcStart() {
+      document.getElementById('fc-start').classList.remove('hidden');
+      document.getElementById('fc-play').classList.add('hidden');
     }
 
     function showFlashcard(direction) {
@@ -847,12 +942,13 @@
         document.getElementById('fc-viet').textContent = "Trống dữ liệu";
         return;
       }
-      const card = fcCards[fcIndex];
-
+      
+      // Đảm bảo thẻ luôn ở trạng thái úp khi chuyển sang từ mới
       const fc = document.getElementById('flashcard');
       fc.classList.remove('flipped');
       isFlipped = false;
 
+      const card = fcCards[fcIndex];
       let cleanHanzi = card.hanzi.split('【')[0].trim();
       document.getElementById('fc-hanzi').textContent = cleanHanzi;
       document.getElementById('fc-pinyin').textContent = card.pinyin;
@@ -872,16 +968,6 @@
       document.getElementById('fc-progress').style.width = ((fcIndex + 1) / fcCards.length * 100) + '%';
       document.getElementById('fc-count').textContent = `${fcIndex + 1}/${fcCards.length}`;
 
-      const inner = document.getElementById('flip-inner-el');
-      inner.classList.remove('slide-in-right', 'slide-in-left');
-      if (direction === 'right') {
-        void inner.offsetWidth;
-        inner.classList.add('slide-in-right');
-      } else if (direction === 'left') {
-        void inner.offsetWidth;
-        inner.classList.add('slide-in-left');
-      }
-
       document.getElementById('btn-prev').style.opacity = fcIndex > 0 ? '1' : '0.3';
       document.getElementById('btn-next').style.opacity = fcIndex < fcCards.length - 1 ? '1' : '0.3';
     }
@@ -895,29 +981,51 @@
     function goToCard(newIndex, direction) {
       if (isAnimating || newIndex < 0 || newIndex >= fcCards.length) return;
       isAnimating = true;
-      const inner = document.getElementById('flip-inner-el');
-      inner.classList.add(direction === 'right' ? 'slide-out-left' : 'slide-out-right');
+      
+      const fc = document.getElementById('flashcard');
+      // Mờ dần và trượt nhẹ
+      fc.style.opacity = '0';
+      fc.style.transform = direction === 'right' ? 'translateX(-30px)' : 'translateX(30px)';
 
       setTimeout(() => {
-        inner.classList.remove('slide-out-left', 'slide-out-right');
         fcIndex = newIndex;
-        showFlashcard(direction);
-        isAnimating = false;
-      }, 300);
+        showFlashcard(direction); // Cập nhật nội dung và reset flip ở đây
+        
+        // Đặt lại vị trí để chuẩn bị trượt vào
+        fc.style.transition = 'none';
+        fc.style.transform = direction === 'right' ? 'translateX(30px)' : 'translateX(-30px)';
+        
+        // Kích hoạt reflow để áp dụng style ngay lập tức
+        void fc.offsetWidth; 
+        
+        // Bật lại transition và trượt vào giữa
+        fc.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+        fc.style.opacity = '1';
+        fc.style.transform = 'translateX(0)';
+
+        setTimeout(() => { isAnimating = false; }, 250);
+      }, 250);
     }
 
     function nextCardManual() {
+      if (fcCards.length === 0) return;
       if (fcIndex < fcCards.length - 1) {
         goToCard(fcIndex + 1, 'right');
       } else {
-        showToast('🔄 Đã hết bộ từ! Đang xáo lại bài...', 'info');
-        fcCards.sort(() => Math.random() - 0.5);
-        fcIndex = 0;
-        showFlashcard('right');
+        showToast('🔄 Đã học xong danh sách này! Quay lại từ đầu.', 'info');
+        fcIndex = 0; // Không xáo trộn, chỉ quay lại từ đầu
+        const fc = document.getElementById('flashcard');
+        fc.style.opacity = '0';
+        setTimeout(() => {
+          showFlashcard('none');
+          fc.style.opacity = '1';
+        }, 200);
       }
     }
 
-    function prevCard() { if (fcIndex > 0) goToCard(fcIndex - 1, 'left'); }
+    function prevCard() { 
+      if (fcIndex > 0) goToCard(fcIndex - 1, 'left'); 
+    }
 
     function fcAction(status) {
       if (fcCards.length === 0) return;
